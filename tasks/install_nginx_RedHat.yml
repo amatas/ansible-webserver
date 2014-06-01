@@ -17,6 +17,20 @@
    - install
    - nginx
 
+- name: Set log directory permissions
+  file: path={{webserver_nginx_log_directory}} owner={{webserver_user}}
+        group={{webserver_group}} state=directory recurse=yes mode=0750
+  tags:
+    - configure
+    - nginx
+
+- name: Set lib directory permissions
+  file: path={{webserver_nginx_lib_directory}} owner={{webserver_user}}
+        group={{webserver_group}} state=directory recurse=yes mode=0750
+  tags:
+    - configure
+    - nginx
+
 - name: Set nginx.conf file
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644 backup=yes
   notify:

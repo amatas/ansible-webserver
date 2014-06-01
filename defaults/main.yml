@@ -14,3 +14,7 @@ webserver_vhost_name: vhost
 webserver_vhosts:
   # Additional properties: 'serveradmin, extra_parameters'.
   - {servername: "local.dev", documentroot: "/var/www/html"}
+
+webserver_nginx_log_directory: /var/log/nginx
+webserver_nginx_lib_directory: /var/lib/nginx
+webserver_apache_log_directory: /var/log/apache
