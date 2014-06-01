@@ -1,10 +1,21 @@
 ---
+- name: test httpd and reload
+  command: apache2ctl -t
+  notify: reload httpd
 
 - name: restart httpd
   service: name=httpd state=restarted
 
 - name: reload httpd
   service: name=httpd state=reloaded
+
+- name: test nginx and reload
+  command: nginx -t
+  notify: reload nginx
+
+- name: test nginx and restart
+  command: nginx -t
+  notify: restart nginx
 
 - name: restart nginx
   service: name=nginx state=restarted

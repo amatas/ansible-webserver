@@ -1,8 +1,5 @@
 ---
 
-#Prepare env for webserver
-#Check if user/group exist
-
 - name: Check and create default group for webserver
   group: name={{webserver_group}} state=present
 
