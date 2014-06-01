@@ -1,0 +1,42 @@
+---
+
+- name: Check EPEL repository
+  shell: 'yum repolist | grep ^epel | cut -f1 -d\ '
+  register: epel_enabled
+  changed_when: false
+
+- name: Downloading and enable the EPEL repository definitions.
+  action: command rpm -Uvh --replacepkgs http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+  when: epel_enabled.stdout != 'epel'
+
+- name: Install nginx web server for RedHat derivatives
+  yum: name={{ item }} state=present
+  with_items:
+   - nginx
+  tags:
+   - install
+   - nginx
+
+- name: Copy nginx.conf file
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0644 backup=yes
+  notify:
+   - restart nginx
+  tags:
+   - configure
+   - nginx
+
+# TODO: rename the vhosts file to servername
+- name: Set up virtual hosts
+  template: src=vhosts-nginx.conf.j2 dest="/etc/nginx/conf.d/{{webserver_vhost_name}}.conf"
+      owner=root group=root mode=0644
+  notify:
+   - restart nginx
+  tags:
+   - configure
+   - nginx
+
+- name: Start and enable nginx web server for RedHat derivatives
+  service: name=nginx state=started enabled=yes
+  tags:
+   - install
+   - nginx

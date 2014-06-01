@@ -1,0 +1,16 @@
+---
+webserver_type: nginx
+
+webserver_home: /var/www
+
+webserver_user: www-data
+webserver_group: www-data
+
+webserver_listen_ports:
+  - 80
+
+webserver_vhost_name: vhost
+
+webserver_vhosts:
+  # Additional properties: 'serveradmin, extra_parameters'.
+  - {servername: "local.dev", documentroot: "/var/www/html"}

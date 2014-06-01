@@ -1,0 +1,28 @@
+---
+
+#Prepare env for webserver
+#Check if user/group exist
+
+- name: Check and create default group for webserver
+  group: name={{webserver_group}} state=present
+
+- name: Check and create default user for webserver
+  user: name={{webserver_user}} state=present system=yes
+        createhome=no home={{webserver_home}} comment='webuser'
+        group={{webserver_group}} shell='/sbin/nologin'
+
+- name: Check and create default home directory of webserver
+  file: path={{webserver_home}} state=directory group={{webserver_group}}
+        owner={{webserver_user}} mode=0775
+
+- include: install_apache_RedHat.yml
+  when: ansible_os_family == 'RedHat' and webserver_type == 'apache'
+
+- include: install_apache_Debian.yml
+  when: ansible_os_family == 'Debian' and webserver_type == 'apache'
+
+- include: install_nginx_RedHat.yml
+  when: ansible_os_family == 'RedHat' and webserver_type == 'nginx'
+
+- include: install_nginx_Debian.yml
+  when: ansible_os_family == 'Debian' and webserver_type == 'nginx'
