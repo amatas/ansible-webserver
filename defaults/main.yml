@@ -2,19 +2,29 @@
 webserver_type: nginx
 
 webserver_home: /var/www
-
 webserver_user: www-data
 webserver_group: www-data
 
-webserver_listen_ports:
-  - 80
-
-webserver_vhost_name: vhost
-
-webserver_vhosts:
-  # Additional properties: 'serveradmin, extra_parameters'.
-  - {servername: "local.dev", documentroot: "/var/www/html"}
+webserver_worker_processes: "{{ ansible_processor_vcpus }}"
+webserver_max_clients: 512
+webserver_worker_rlimit_nofile: 1024
 
 webserver_nginx_log_directory: /var/log/nginx
 webserver_nginx_lib_directory: /var/lib/nginx
 webserver_apache_log_directory: /var/log/apache
+
+webserver_http_params:
+  - sendfile "on"
+  - tcp_nopush "on"
+  - tcp_nodelay "on"
+  - keepalive_timeout "65"
+  - access_log "{{webserver_nginx_log_directory}}/access.log"
+  - error_log "{{webserver_nginx_log_directory}}/error.log"
+
+webserver_sites:
+  default:
+     - listen 80
+     - server_name _  
+     - root "/var/www/html"
+     - index index.html
+

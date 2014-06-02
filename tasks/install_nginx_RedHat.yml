@@ -32,17 +32,17 @@
     - nginx
 
 - name: Set nginx.conf file
-  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644 backup=yes
+  template: src=nginx-config.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644 backup=yes
   notify:
    - test nginx and restart
   tags:
    - configure
    - nginx
 
-# TODO: rename the vhosts file to servername
 - name: Set up virtual hosts
-  template: src=vhosts-nginx.conf.j2 dest="/etc/nginx/conf.d/{{webserver_vhost_name}}.conf"
+  template: src=nginx-site.conf.j2 dest="/etc/nginx/conf.d/{{ item }}.conf"
       owner=root group=root mode=0644
+  with_items: webserver_sites.keys()
   notify:
    - test nginx and reload
   tags:
