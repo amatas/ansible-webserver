@@ -17,6 +17,12 @@
    - install
    - nginx
 
+- name: Remove default server
+  file: name=/etc/nginx/conf.d/default.conf state=absent
+  tags:
+    - install
+    - nginx
+
 - name: Set log directory permissions
   file: path={{webserver_nginx_log_directory}} owner={{webserver_user}}
         group={{webserver_group}} state=directory recurse=yes mode=0750
