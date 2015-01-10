@@ -1,7 +1,7 @@
 ---
 
-- name: Check EPEL 6 repository
-  shell: 'yum repolist | grep ^epel | cut -f1 -d\ '
+- name: Check EPEL repository
+  shell: 'yum repolist | grep ^epel | cut -f1 -d" "'
   register: epel_enabled
   changed_when: false
   tags:
